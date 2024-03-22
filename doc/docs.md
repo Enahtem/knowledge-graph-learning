@@ -2,7 +2,8 @@
 
 ## File Structure
 * src: source files
-* lib: dependancies, headers/attached source files
+* include: headers/attached source files
+* lib: dependancies (libraries)
 * doc: documentation
 * res: static resources (images, audio)
 * tools: scripts that automate tasks in project
