@@ -16,7 +16,12 @@ Maybe also include justification?
 ### Dependencies
 
 * Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+* Windows 11?
+* GLFW
+* GLEW
+* [Building GLFW/GLEW](https://medium.com/@bhargav.chippada/how-to-setup-opengl-on-mingw-w64-in-windows-10-64-bits-b77f350cea7e)
+
+
 
 ### Installing
 
