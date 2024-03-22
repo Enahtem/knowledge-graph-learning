@@ -66,5 +66,14 @@ Distributed under the MIT License. See 'LICENSE.txt' for more information.
 ## Acknowledgments
 
 Inspiration, code snippets, etc.
-* [IBM Grapher](https://github.com/IBM/Grapher)
+* [IBM Grapher](https://github.com/IBM/Grapher): Efficient Knowledge Graph Extraction
+* [AI Notes](https://github.com/brylevkirill/notes): Good AI Reference Notes
+* [Sigma.js](https://github.com/jacomyal/sigma.js): Efficient Graph Visualization
+* [Logikon](https://github.com/logikon-ai/logikon): Analyzing LLM Reasoning
+* [Argument Graph Mining](https://github.com/recap-utr/argument-graph-mining): General Argument Mining
+* [MITIE](https://github.com/mit-nlp/MITIE): Information Extraction
+* [DeepKE](https://github.com/zjunlp/DeepKE): Knowledge Graph Extraction
+* [Open Entity Relation Extraction](https://github.com/lemonhu/open-entity-relation-extraction/tree/master): Knowledge Triple Extraction from Dependency Syntax
+* [GraphGPT](https://github.com/varunshenoy/GraphGPT): Knowledge Graph from GPT-3
+* [AmpliGraph](https://github.com/Accenture/AmpliGraph): Predicts links between knowledge graph concepts
 * 
