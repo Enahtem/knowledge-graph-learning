@@ -1,11 +1,15 @@
 # Knowledge Graph Learning
 
 Simple overview of use/purpose.
+Learning Enhancements with AI and Knowledge Graphs
 
 ## Description
 
 An in-depth paragraph about your project and overview of use.
 Maybe also include justification?
+
+* Learning: Generating > Understanding > Internalizing of knowledge graphs
+* Partially automating this learning process to make learning faster.
 
 ## Getting Started
 
