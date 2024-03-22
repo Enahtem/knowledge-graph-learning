@@ -1,7 +1,7 @@
 # Knowledge Graph Learning
 
 Simple overview of use/purpose.
-Learning Enhancements with AI and Knowledge Graphs
+* Learning Enhancements with AI and Knowledge Graphs
 
 ## Description
 
