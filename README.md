@@ -1,4 +1,4 @@
-# Knowledge Grapher
+# Knowledge Graph Learning
 
 Simple overview of use/purpose.
 
@@ -48,7 +48,7 @@ command to run if program contains helper info
 - [ ] Implement Note-Taking Ability for Learning
 - [ ] Autonomous Knowledge Graph Extraction (Promotes Generation)
 - [ ] Autonomous Knowledge Graph Questioning (Promotes Understanding)
-- [ ] Autonomous Knowledge Graph Active Recall/Application Tests (Promotes Internalization)
+- [ ] Knowledge Graph Active Recall/Application Tests (Promotes Internalization)
 
 
 ## Authors
@@ -76,4 +76,3 @@ Inspiration, code snippets, etc.
 * [Open Entity Relation Extraction](https://github.com/lemonhu/open-entity-relation-extraction/tree/master): Knowledge Triple Extraction from Dependency Syntax
 * [GraphGPT](https://github.com/varunshenoy/GraphGPT): Knowledge Graph from GPT-3
 * [AmpliGraph](https://github.com/Accenture/AmpliGraph): Predicts links between knowledge graph concepts
-* 
