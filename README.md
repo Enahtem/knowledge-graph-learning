@@ -17,10 +17,7 @@ Maybe also include justification?
 
 * Describe any prerequisites, libraries, OS version, etc., needed before installing program.
 * Windows 11?
-* GLFW
-* GLEW
-* [Building GLFW/GLEW](https://medium.com/@bhargav.chippada/how-to-setup-opengl-on-mingw-w64-in-windows-10-64-bits-b77f350cea7e)
-* [Building GLFW/GLEW2?](https://github.com/knitterJ/the-easiest-way-to-start-using-OpenGL-MinGW-glfw-or-freeglut-glad-or-glew-no-cmake/tree/main)
+* SDL2
 
 ### Installing
 
