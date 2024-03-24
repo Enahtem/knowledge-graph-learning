@@ -12,17 +12,17 @@ Maybe also include justification?
 Learning: Growing personal knowledge graph
 "Embrace the suffering of growth"
 
-* Diffuse
+* Generation
   * Extract broad knowledge graph from text
   * Extend with spontaneous entities/relations
 
-* Focus
+* Evaluation
   * Explain contents of knowledge graph, eliminating uncertanties
   * Apply knowledge graph, evaluating with active feedback
 
-* Break
+* Internalization
   * Retain knowledge graph with active recall and mnemonics
-  * Exercise/rest when focus dips. 90 minute cycles.
+  * Exercise/organize/rest when focus dips. 90 minute cycles.
 
 * Partially automating this learning process to make learning faster.
 
