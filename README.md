@@ -8,7 +8,22 @@ Simple overview of use/purpose.
 An in-depth paragraph about your project and overview of use.
 Maybe also include justification?
 
-* Learning: Generating > Understanding > Internalizing of knowledge graphs
+
+Learning: Growing personal knowledge graph
+"Embrace the suffering of growth"
+
+* Diffuse
+* Extract broad knowledge graph from text
+* Extend with spontaneous entities/relations
+
+* Focus
+* Explain contents of knowledge graph, eliminating uncertanties
+* Apply knowledge graph, evaluating with active feedback
+
+* Break
+* Retain knowledge graph with active recall and mnemonics
+* Exercise/rest when focus dips. 90 minute cycles.
+
 * Partially automating this learning process to make learning faster.
 
 ## Getting Started
@@ -52,8 +67,9 @@ command to run if program contains helper info
 - [ ] Adjust to Knowledge Graph Visualizer
 - [ ] Implement Note-Taking Ability for Learning
 - [ ] Autonomous Knowledge Graph Extraction (Promotes Generation)
-- [ ] Autonomous Knowledge Graph Questioning (Promotes Understanding)
-- [ ] Knowledge Graph Active Recall/Application Tests (Promotes Internalization)
+- [ ] Autonomous Knowledge Graph Questioning/Application Tests (Promotes Understanding)
+- [ ] Knowledge Graph Active Recall Tests (Promotes Internalization)
+- [ ] (In summary, automating the elements of learning that don't require true critical thinking????)
 
 
 ## Authors
