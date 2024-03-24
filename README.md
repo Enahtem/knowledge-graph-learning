@@ -13,16 +13,16 @@ Learning: Growing personal knowledge graph
 "Embrace the suffering of growth"
 
 * Diffuse
-* Extract broad knowledge graph from text
-* Extend with spontaneous entities/relations
+  * Extract broad knowledge graph from text
+  * Extend with spontaneous entities/relations
 
 * Focus
-* Explain contents of knowledge graph, eliminating uncertanties
-* Apply knowledge graph, evaluating with active feedback
+  * Explain contents of knowledge graph, eliminating uncertanties
+  * Apply knowledge graph, evaluating with active feedback
 
 * Break
-* Retain knowledge graph with active recall and mnemonics
-* Exercise/rest when focus dips. 90 minute cycles.
+  * Retain knowledge graph with active recall and mnemonics
+  * Exercise/rest when focus dips. 90 minute cycles.
 
 * Partially automating this learning process to make learning faster.
 
@@ -66,10 +66,9 @@ command to run if program contains helper info
 - [ ] Create Graph Drawing Visualization
 - [ ] Adjust to Knowledge Graph Visualizer
 - [ ] Implement Note-Taking Ability for Learning
-- [ ] Autonomous Knowledge Graph Extraction (Promotes Generation)
-- [ ] Autonomous Knowledge Graph Questioning/Application Tests (Promotes Understanding)
-- [ ] Knowledge Graph Active Recall Tests (Promotes Internalization)
-- [ ] (In summary, automating the elements of learning that don't require true critical thinking????)
+- [ ] Autonomous Knowledge Graph Extraction (Diffuse)
+- [ ] Autonomous Knowledge Graph Explanation/Application Tests (Focus)
+- [ ] Knowledge Graph Active Recall Tests (Break)
 
 
 ## Authors
