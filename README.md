@@ -8,6 +8,7 @@ Simple overview of use/purpose.
 An in-depth paragraph about your project and overview of use.
 Maybe also include justification?
 
+NLP Weekly Monday Meetings
 
 Learning: Growing personal knowledge graph
 "Embrace the suffering of growth"
