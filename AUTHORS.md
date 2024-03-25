@@ -1,3 +1,3 @@
 # Authors
 
-* Hector Chen (Enahtem)
+- Hector Chen (Enahtem)

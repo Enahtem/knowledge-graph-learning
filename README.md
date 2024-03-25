@@ -1,35 +1,10 @@
-# Knowledge Graph Learning
+# Knowledge Grapher
 
-Simple overview of use/purpose.
-
-- Learning Enhancements with AI and Knowledge Graphs
+- Knowledge Graph Extraction
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
-Maybe also include justification?
-
-NLP Weekly Monday Meetings
-
-Learning: Growing personal knowledge graph
-"Embrace the suffering of growth"
-
-- Generation
-
-  - Extract broad knowledge graph from text
-  - Extend with spontaneous entities/relations
-
-- Evaluation
-
-  - Explain contents of knowledge graph, eliminating uncertanties
-  - Apply knowledge graph, evaluating with active feedback
-
-- Internalization
-
-  - Retain knowledge graph with active recall and mnemonics
-  - Exercise/organize/rest when focus dips. 90 minute cycles.
-
-- Partially automating this learning process to make learning faster.
+???
 
 ## Getting Started
 
@@ -70,12 +45,11 @@ command to run if program contains helper info
 
 ## Roadmap
 
+Weekly Update Meetings (~6:00 on Mondays at PT271)
+
 - [ ] Create Graph Drawing Visualization
-- [ ] Adjust to Knowledge Graph Visualizer
-- [ ] Implement Note-Taking Ability for Learning
-- [ ] Autonomous Knowledge Graph Extraction (Diffuse)
-- [ ] Autonomous Knowledge Graph Explanation/Application Tests (Focus)
-- [ ] Knowledge Graph Active Recall Tests (Break)
+- [ ] ???
+- [ ] ???
 
 ## Authors
 
