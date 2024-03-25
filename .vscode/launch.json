@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/hecto/Documents/GitHub/knowledge-graph-learning/src",
-      "program": "c:/Users/hecto/Documents/GitHub/knowledge-graph-learning/src/build/Debug/outDebug",
+      "cwd": "c:/Users/hecto/Documents/GitHub/knowledge-grapher/src",
+      "program": "c:/Users/hecto/Documents/GitHub/knowledge-grapher/src/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

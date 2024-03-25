@@ -1,10 +1,17 @@
+# Set directory to root
 Set-Location ..
-$env:PATH += ";$(Get-Location)\lib"
+
+# Making all dlls in lib accessible
+$directory = "$(Get-Location)\lib"
+$subdirectories = Get-ChildItem -Path $directory -Directory -Recurse
+foreach ($subdir in $subdirectories) {
+    $env:PATH += ";" + $subdir.FullName
+}
 
 # Compile the source file
 g++ -o ./build/demo.exe ./src/main.c `
     -I ./include `
-    -L ./lib `
+    -L ./lib/* `
     -lmingw32 `
     -lSDL2main `
     -lSDL2 `
