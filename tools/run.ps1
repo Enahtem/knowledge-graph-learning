@@ -14,10 +14,10 @@ gcc -o ./build/demo.exe ./src/main.c `
     -L ./lib/* `
     -lmingw32 `
     -lSDL2main `
+    -lSDL2_ttf `
     -lSDL2 `
     -luser32 `
-    -lgdi32
-
+    -lgdi32 
 # Check if compilation was successful
 if ($LASTEXITCODE -eq 0) {
     Write-Output "Compilation successful. Running the executable..."

@@ -13,6 +13,8 @@
 - Describe any prerequisites, libraries, OS version, etc., needed before installing program.
 - Windows 11?
 - SDL2
+- MinGW
+- 
 
 ### Installing
 
