@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #define NUM_NODES 100
 #define NODE_RADIUS 10
@@ -81,7 +82,166 @@ void render(SDL_Renderer *renderer, int selected_node_index) {
     SDL_RenderPresent(renderer);
 }
 
+
+// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+typedef struct Entity{
+    char *label;
+    char *description;
+    int x;
+    int y;
+    struct Relation **relations;
+    int num_relations;
+} Entity;
+
+typedef struct Relation{
+    char *label;
+    char *desription;
+    struct Entity *entity;
+}Relation;
+
+typedef struct KnowledgeGraph{
+    Entity **entities;
+    int num_entities;
+}KnowledgeGraph;
+
+
+
+void initialize_graph(KnowledgeGraph *knowledgegraph){
+    knowledgegraph->entities=NULL;
+    knowledgegraph->num_entities=0;
+}
+
+void add_knowledge(KnowledgeGraph *knowledgegraph, char *e_label1, char *e_description1, char *r_label, char *r_description, char *e_label2, char *e_description2){
+    int has_entity1 = 0;
+    int has_entity2 = 0;
+    int entity1_index = 0;
+    int entity2_index = 0;
+    for (int i =0;i<knowledgegraph->num_entities;i++){
+        if (strcmp((knowledgegraph->entities)[i]->label, e_label1)==0){
+            has_entity1=1;
+            entity1_index=i;
+        }
+        
+        if (strcmp((knowledgegraph->entities)[i]->label, e_label2)==0){
+            has_entity2=1;
+            entity2_index=i;
+        }
+    }
+
+    if (has_entity1 == 0){
+        knowledgegraph->num_entities++;
+        knowledgegraph->entities = (Entity **)realloc(knowledgegraph->entities, sizeof(Entity *)*(knowledgegraph->num_entities));
+        entity1_index=knowledgegraph->num_entities-1;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]=(Entity *)malloc(sizeof(Entity));
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->label=(char *)malloc(sizeof(e_label1)+1);
+        strcpy(knowledgegraph->entities[knowledgegraph->num_entities-1]->label, e_label1);
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->description=(char *)malloc(sizeof(e_description1)+1);
+        strcpy(knowledgegraph->entities[knowledgegraph->num_entities-1]->description, e_description1);
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->num_relations=0;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->relations=NULL;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->x=0;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->y=0;
+    }
+    if (has_entity2==0){
+        knowledgegraph->num_entities++;
+        knowledgegraph->entities = (Entity **)realloc(knowledgegraph->entities, sizeof(Entity *)*(knowledgegraph->num_entities));
+        entity2_index=knowledgegraph->num_entities-1;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]=(Entity *)malloc(sizeof(Entity));
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->label=(char *)malloc(sizeof(e_label2)+1);
+        strcpy(knowledgegraph->entities[knowledgegraph->num_entities-1]->label, e_label2);
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->description=(char *)malloc(sizeof(e_description2)+1);
+        strcpy(knowledgegraph->entities[knowledgegraph->num_entities-1]->description, e_description2);
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->num_relations=0;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->relations=NULL;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->x=0;
+        knowledgegraph->entities[knowledgegraph->num_entities-1]->y=0;
+    }
+
+
+    for (int i =0;i<knowledgegraph->entities[entity1_index]->num_relations;i++){
+        if(strcmp(knowledgegraph->entities[entity1_index]->relations[i]->entity->label, e_label2)==0){
+            return;
+        }
+    }
+    knowledgegraph->entities[entity1_index]->num_relations++;
+    knowledgegraph->entities[entity1_index]->relations = (Relation **)realloc(knowledgegraph->entities[entity1_index]->relations,sizeof(Relation *)*knowledgegraph->entities[entity1_index]->num_relations);
+    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations-1]=(Relation *)malloc(sizeof(Relation));
+    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations-1]->label=(char *)malloc(sizeof(r_label)+1);
+    strcpy(knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations-1]->label, r_label);
+    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations-1]->desription=(char *)malloc(sizeof(r_description)+1);
+    strcpy(knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations-1]->desription, r_description);
+    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations-1]->entity=knowledgegraph->entities[entity2_index];
+}
+
+void print_graph(KnowledgeGraph *knowledgegraph){
+    for (int i =0;i<knowledgegraph->num_entities;i++){
+        printf("%s: ", knowledgegraph->entities[i]->label);
+        for (int j =0;j<knowledgegraph->entities[i]->num_relations;j++){
+            printf("%s %s, ", knowledgegraph->entities[i]->relations[j]->label, knowledgegraph->entities[i]->relations[j]->entity->label);
+        }
+        printf("\n");
+    }
+}
+
+
+// Use this coding style to improve self.
+void destroy_graph(KnowledgeGraph *knowledgegraph) {
+    if (knowledgegraph == NULL || knowledgegraph->entities == NULL) {
+        return;
+    }
+    for (int i = 0; i < knowledgegraph->num_entities; i++) {
+        Entity *entity = knowledgegraph->entities[i];
+        if (entity == NULL) {
+            continue;
+        }
+        free(entity->label);
+        free(entity->description);
+
+        for (int j = 0; j < entity->num_relations; j++) {
+            Relation *relation = entity->relations[j];
+            if (relation == NULL) {
+                continue;
+            }
+            free(relation->label);
+            free(relation);
+        }
+        free(entity->relations);
+        free(entity);
+    }
+    free(knowledgegraph->entities);
+    knowledgegraph->num_entities = 0;
+}
+
+
+
+void display_graph(KnowledgeGraph *knowledgegraph){
+    // SDL Stuff Here
+}
+
+/*
+Display Knowledge Graph
+Delete/Edit Knowledge
+*/
+
 int main(int argc, char *argv[]) {
+    // Personal Testing
+    KnowledgeGraph *knowledgegraph=(KnowledgeGraph *)malloc(sizeof(KnowledgeGraph));
+    initialize_graph(knowledgegraph);
+
+    char *knowledge[] = {"socrates","","is a","","mortal",""};
+    char *knowledge2[] = {"mortal","","is a property of","","socrates",""};
+
+    add_knowledge(knowledgegraph, knowledge[0], knowledge[1], knowledge[2], knowledge[3], knowledge[4], knowledge[5]);
+    add_knowledge(knowledgegraph, knowledge2[0], knowledge2[1], knowledge2[2], knowledge2[3], knowledge2[4], knowledge2[5]);
+    print_graph(knowledgegraph);
+    destroy_graph(knowledgegraph);
+
+
+
+
+
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("SDL_Init Error: %s\n", SDL_GetError());
         return 1;

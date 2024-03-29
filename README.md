@@ -41,15 +41,13 @@ command to run if program contains helper info
 - 0.2
   - ???
 - 0.1
-  - ???
+  -
 
 ## Roadmap
 
 Weekly Update Meetings (~6:00 on Mondays at PT271)
 
-- [ ] Create Graph Drawing Visualization
-- [ ] ???
-- [ ] ???
+- [ ] Working Graph Visualizer. (Nodes randomly placed)
 
 ## Authors
 

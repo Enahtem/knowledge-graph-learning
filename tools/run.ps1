@@ -9,7 +9,7 @@ foreach ($subdir in $subdirectories) {
 }
 
 # Compile the source file
-g++ -o ./build/demo.exe ./src/main.c `
+gcc -o ./build/demo.exe ./src/main.c `
     -I ./include `
     -L ./lib/* `
     -lmingw32 `
