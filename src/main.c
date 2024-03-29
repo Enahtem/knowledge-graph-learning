@@ -111,7 +111,6 @@ void print_graph(KnowledgeGraph* knowledgegraph) {
     }
 }
 
-// Use this coding style to improve self.
 void destroy_graph(KnowledgeGraph* knowledgegraph) {
     if (knowledgegraph == NULL || knowledgegraph->entities == NULL) {
         return;
@@ -180,6 +179,13 @@ void render_entities(SDL_Renderer* renderer, KnowledgeGraph* knowledgegraph, TTF
             SDL_FreeSurface(textSurface);
             SDL_DestroyTexture(textTexture);
         }
+
+        // Update forces here.
+        // Relations attract get c_1 log (distance/c2)
+        // Entities repel c3/d^2
+
+
+
     }
 
     // Update the screen
@@ -227,9 +233,6 @@ int main(int argc, char* argv[]) {
     add_knowledge(knowledgegraph, knowledge2[0], knowledge2[1], knowledge2[2], knowledge2[3], knowledge2[4], knowledge2[5]);
     print_graph(knowledgegraph);
 
-    // Render entities
-    render_entities(renderer, knowledgegraph, font);
-
     // Event loop
     int quit = 0;
     SDL_Event e;
@@ -239,6 +242,12 @@ int main(int argc, char* argv[]) {
                 quit = 1;
             }
         }
+        time_t start_time, end_time;
+        time(&start_time);
+        while (difftime(start_time, end_time)<1){ //1 Frame per Second.
+            time(&end_time);
+        }
+        render_entities(renderer, knowledgegraph, font);
     }
 
     // Cleanup

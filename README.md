@@ -49,7 +49,8 @@ command to run if program contains helper info
 
 Weekly Update Meetings (~6:00 on Mondays at PT271)
 
-- [ ] Working Graph Visualizer. (Nodes randomly placed)
+- [ ] Force Based Graph Drawing
+- [ ] IBM Grapher Implementation
 
 ## Authors
 
