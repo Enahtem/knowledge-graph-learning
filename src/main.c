@@ -1,9 +1,12 @@
+
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <math.h>
 
 // Screen dimensions
 #define SCREEN_WIDTH 1280
@@ -13,7 +16,18 @@
 #define SELECTED_COLOR_GREEN 0
 #define SELECTED_COLOR_BLUE 0
 
-#define ENTITY_RADIUS 40
+#define ENTITY_RADIUS 30
+
+//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+// NEED TO FIX BUGS IN foRCE DISPLAY
+
+
+// Force Based Algorithms
+#define C1 2
+#define C2 1
+#define C3 1
+#define C4 0.1
+
 
 typedef struct Entity {
     char* label;
@@ -138,6 +152,50 @@ void destroy_graph(KnowledgeGraph* knowledgegraph) {
     knowledgegraph->num_entities = 0;
 }
 
+void update_forces(KnowledgeGraph* knowledgegraph) {
+    // Iterate through all entities
+    for (int i = 0; i < knowledgegraph->num_entities; i++) {
+        int force_x = 0;
+        int force_y = 0;
+        Entity* entity1 = knowledgegraph->entities[i];
+
+        // Calculate repulsive forces between entities
+        for (int j = 0; j < knowledgegraph->num_entities; j++) {
+            if (i != j) {
+                Entity* entity2 = knowledgegraph->entities[j];
+                int dx = entity1->x - entity2->x;
+                int dy = entity1->y - entity2->y;
+                double distance_squared = dx * dx + dy * dy;
+
+                // Repulsive force
+                double repulsive_force = C3 / (distance_squared);
+                force_x += repulsive_force;
+                force_y += repulsive_force;
+            }
+        }
+
+        // Calculate spring forces between related entities
+        for (int j = 0; j < entity1->num_relations; j++) {
+            Entity* relatedEntity = entity1->relations[j]->entity;
+            int dx = entity1->x - relatedEntity->x;
+            int dy = entity1->y - relatedEntity->y;
+            double distance_squared = dx * dx + dy * dy;
+            double distance = sqrt(distance_squared);
+
+            // Spring force
+            double spring_force = C1 * log(distance / C2);
+            force_x -= spring_force;
+            force_y -= spring_force;
+        }
+
+        // Update entity position based on forces
+        entity1->x += (int)(C4 * force_x);
+        entity1->y += (int)(C4 * force_y);
+        printf("Force: %d, %d", force_x, force_y);
+    }
+}
+
+
 void render_entities(SDL_Renderer* renderer, KnowledgeGraph* knowledgegraph, TTF_Font* font) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Set background color to black
 
@@ -172,6 +230,7 @@ void render_entities(SDL_Renderer* renderer, KnowledgeGraph* knowledgegraph, TTF
             SDL_RenderDrawLine(renderer, knowledgegraph->entities[i]->x, knowledgegraph->entities[i]->y, relatedEntity->x, relatedEntity->y);
 
             // Render relation name along the edge
+            SDL_Color textColor = {255, 255, 255, 255 }; // White color
             textSurface = TTF_RenderText_Solid(font, knowledgegraph->entities[i]->relations[j]->label, textColor);
             textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
             SDL_Rect textRect = { (knowledgegraph->entities[i]->x + relatedEntity->x) / 2, (knowledgegraph->entities[i]->y + relatedEntity->y) / 2, strlen(knowledgegraph->entities[i]->relations[j]->label) * 6, 20 };
@@ -180,11 +239,7 @@ void render_entities(SDL_Renderer* renderer, KnowledgeGraph* knowledgegraph, TTF
             SDL_DestroyTexture(textTexture);
         }
 
-        // Update forces here.
-        // Relations attract get c_1 log (distance/c2)
-        // Entities repel c3/d^2
-
-
+        update_forces(knowledgegraph);
 
     }
 
@@ -193,6 +248,7 @@ void render_entities(SDL_Renderer* renderer, KnowledgeGraph* knowledgegraph, TTF
 }
 
 int main(int argc, char* argv[]) {
+    srand(time(NULL));
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("SDL initialization failed! Error: %s\n", SDL_GetError());
@@ -227,10 +283,32 @@ int main(int argc, char* argv[]) {
     // Create knowledge graph
     KnowledgeGraph* knowledgegraph = malloc(sizeof(KnowledgeGraph));
     initialize_graph(knowledgegraph);
-    char* knowledge[] = { "socrates", "", "is a", "", "mortal", "" };
-    char* knowledge2[] = { "mortal", "", "is a property of", "", "thing", "" };
-    add_knowledge(knowledgegraph, knowledge[0], knowledge[1], knowledge[2], knowledge[3], knowledge[4], knowledge[5]);
-    add_knowledge(knowledgegraph, knowledge2[0], knowledge2[1], knowledge2[2], knowledge2[3], knowledge2[4], knowledge2[5]);
+    char* knowledge[][6] = {
+        { "apple", "", "is a", "", "fruit", "" },
+        { "banana", "", "is a", "", "fruit", "" },
+        { "orange", "", "is a", "", "fruit", "" },
+        { "fruit", "", "is a type of", "", "food", "" },
+        { "carrot", "", "is a", "", "vegetable", "" },
+        { "broccoli", "", "is a", "", "vegetable", "" },
+        { "vegetable", "", "is a type of", "", "food", "" },
+        { "dog", "", "is a", "", "mammal", "" },
+        { "cat", "", "is a", "", "mammal", "" },
+        { "mammal", "", "is a type of", "", "animal", "" },
+        { "fish", "", "is a", "", "animal", "" },
+        { "bird", "", "is a", "", "animal", "" },
+        { "animal", "", "is a type of", "", "living thing", "" },
+        { "flower", "", "is a", "", "plant", "" },
+        { "tree", "", "is a", "", "plant", "" },
+        { "plant", "", "is a type of", "", "living thing", "" },
+        { "living thing", "", "is a part of", "", "ecosystem", "" },
+        { "ecosystem", "", "is a type of", "", "environment", "" },
+        { "environment", "", "is essential for", "", "life", "" },
+        { "life", "", "is characterized by", "", "growth", "" }
+    };
+
+    for (int i = 0; i < sizeof(knowledge) / sizeof(knowledge[0]); i++) {
+        add_knowledge(knowledgegraph, knowledge[i][0], knowledge[i][1], knowledge[i][2], knowledge[i][3], knowledge[i][4], knowledge[i][5]);
+    }
     print_graph(knowledgegraph);
 
     // Event loop
@@ -244,7 +322,7 @@ int main(int argc, char* argv[]) {
         }
         time_t start_time, end_time;
         time(&start_time);
-        while (difftime(start_time, end_time)<1){ //1 Frame per Second.
+        while (difftime(start_time, end_time)<10){ //100 Frames per Second.
             time(&end_time);
         }
         render_entities(renderer, knowledgegraph, font);
