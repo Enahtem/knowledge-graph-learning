@@ -1,3 +1,4 @@
+// FIX FORCE BASED DISPLAY
 
 
 #include <SDL2/SDL.h>
@@ -6,23 +7,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <math.h>
+#include <math.h>   
 
-// Screen dimensions
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-
-#define SELECTED_COLOR_RED 255
-#define SELECTED_COLOR_GREEN 0
-#define SELECTED_COLOR_BLUE 0
-
+#define FPS 30
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 #define ENTITY_RADIUS 30
 
-//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-// NEED TO FIX BUGS IN foRCE DISPLAY
 
-
-// Force Based Algorithms
+// Force-Based Display Constants (https://cs.brown.edu/people/rtamassi/gdhandbook/chapters/force-directed.pdf)
 #define C1 2
 #define C2 1
 #define C3 1
@@ -40,7 +33,7 @@ typedef struct Entity {
 
 typedef struct Relation {
     char* label;
-    char* desription;
+    char* description;
     struct Entity* entity;
 } Relation;
 
@@ -57,62 +50,72 @@ void initialize_graph(KnowledgeGraph* knowledgegraph) {
 void add_knowledge(KnowledgeGraph* knowledgegraph, char* e_label1, char* e_description1, char* r_label, char* r_description, char* e_label2, char* e_description2) {
     int has_entity1 = 0;
     int has_entity2 = 0;
-    int entity1_index = 0;
-    int entity2_index = 0;
+    Entity *entity1 = NULL;
+    Entity *entity2 = NULL;
+
+    // Entity 1 Exists?
     for (int i = 0; i < knowledgegraph->num_entities; i++) {
         if (strcmp((knowledgegraph->entities)[i]->label, e_label1) == 0) {
             has_entity1 = 1;
-            entity1_index = i;
+            entity1=knowledgegraph->entities[i];
+            break;
         }
+        
+    }
 
+    // Entity 2 Exists?
+    for (int i = 0; i < knowledgegraph->num_entities; i++) {
         if (strcmp((knowledgegraph->entities)[i]->label, e_label2) == 0) {
-            has_entity2 = 1;
-            entity2_index = i;
+                has_entity2 = 1;
+                entity2 = knowledgegraph->entities[i];
+                break;
         }
     }
 
+    // Entity 1 Initialization
     if (has_entity1 == 0) {
+        entity1 = (Entity*)malloc(sizeof(Entity));
+        entity1->label = strdup(e_label1);
+        entity1->description = strdup(e_description1);
+        entity1->num_relations = 0;
+        entity1->relations = NULL;
+        entity1->x = rand() % SCREEN_WIDTH;
+        entity1->y = rand() % SCREEN_HEIGHT;
+
         knowledgegraph->num_entities++;
         knowledgegraph->entities = (Entity**)realloc(knowledgegraph->entities, sizeof(Entity*) * (knowledgegraph->num_entities));
-        entity1_index = knowledgegraph->num_entities - 1;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1] = (Entity*)malloc(sizeof(Entity));
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->label = (char*)malloc(sizeof(e_label1) + 1);
-        strcpy(knowledgegraph->entities[knowledgegraph->num_entities - 1]->label, e_label1);
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->description = (char*)malloc(sizeof(e_description1) + 1);
-        strcpy(knowledgegraph->entities[knowledgegraph->num_entities - 1]->description, e_description1);
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->num_relations = 0;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->relations = NULL;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->x = rand() % SCREEN_WIDTH;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->y = rand() % SCREEN_HEIGHT;
-    }
-    if (has_entity2 == 0) {
-        knowledgegraph->num_entities++;
-        knowledgegraph->entities = (Entity**)realloc(knowledgegraph->entities, sizeof(Entity*) * (knowledgegraph->num_entities));
-        entity2_index = knowledgegraph->num_entities - 1;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1] = (Entity*)malloc(sizeof(Entity));
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->label = (char*)malloc(sizeof(e_label2) + 1);
-        strcpy(knowledgegraph->entities[knowledgegraph->num_entities - 1]->label, e_label2);
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->description = (char*)malloc(sizeof(e_description2) + 1);
-        strcpy(knowledgegraph->entities[knowledgegraph->num_entities - 1]->description, e_description2);
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->num_relations = 0;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->relations = NULL;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->x = rand() % SCREEN_WIDTH;
-        knowledgegraph->entities[knowledgegraph->num_entities - 1]->y = rand() % SCREEN_HEIGHT;
+        knowledgegraph->entities[knowledgegraph->num_entities - 1] = entity1;
     }
 
-    for (int i = 0; i < knowledgegraph->entities[entity1_index]->num_relations; i++) {
-        if (strcmp(knowledgegraph->entities[entity1_index]->relations[i]->entity->label, e_label2) == 0) {
+
+    // Entity 2 Initialization
+    if (has_entity2 == 0) {
+        entity2 = (Entity*)malloc(sizeof(Entity));
+        entity2->label = strdup(e_label2);
+        entity2->description = strdup(e_description2);
+        entity2->num_relations=0;
+        entity2->relations=NULL;
+        entity2->x=rand()%SCREEN_WIDTH;
+        entity2->y=rand()%SCREEN_HEIGHT;
+
+        knowledgegraph->num_entities++;
+        knowledgegraph->entities = (Entity**)realloc(knowledgegraph->entities, sizeof(Entity*) * (knowledgegraph->num_entities));
+        knowledgegraph->entities[knowledgegraph->num_entities - 1]=entity2;
+    }
+
+    for (int i = 0; i < entity1->num_relations; i++) {
+        if (strcmp(entity1->relations[i]->entity->label, e_label2) == 0) {
             return;
         }
     }
-    knowledgegraph->entities[entity1_index]->num_relations++;
-    knowledgegraph->entities[entity1_index]->relations = (Relation**)realloc(knowledgegraph->entities[entity1_index]->relations, sizeof(Relation*) * knowledgegraph->entities[entity1_index]->num_relations);
-    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations - 1] = (Relation*)malloc(sizeof(Relation));
-    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations - 1]->label = (char*)malloc(sizeof(r_label) + 1);
-    strcpy(knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations - 1]->label, r_label);
-    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations - 1]->desription = (char*)malloc(sizeof(r_description) + 1);
-    strcpy(knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations - 1]->desription, r_description);
-    knowledgegraph->entities[entity1_index]->relations[knowledgegraph->entities[entity1_index]->num_relations - 1]->entity = knowledgegraph->entities[entity2_index];
+    Relation *relation12 = (Relation*)malloc(sizeof(Relation));
+    relation12->label=strdup(r_label);
+    relation12->description=strdup(r_description);
+    relation12->entity=entity2;
+
+    entity1->num_relations++;
+    entity1->relations = (Relation**)realloc(entity1->relations, sizeof(Relation*) * entity1->num_relations);
+    entity1->relations[entity1->num_relations - 1] = relation12;
 }
 
 void print_graph(KnowledgeGraph* knowledgegraph) {
@@ -152,46 +155,54 @@ void destroy_graph(KnowledgeGraph* knowledgegraph) {
     knowledgegraph->num_entities = 0;
 }
 
+void move_entity(Entity *entity, double force_x, double force_y){
+    entity->x += (int)(C4 * force_x);
+    entity->y += (int)(C4 * force_y);
+    if (entity->x<0){
+        entity->x=0;
+    } else if (entity->x > SCREEN_WIDTH){
+        entity->x=SCREEN_WIDTH;
+    }
+    if (entity->y<0){
+        entity->y=0;
+    } else if (entity->y > SCREEN_HEIGHT){
+        entity->y=SCREEN_HEIGHT;
+    }
+}
+
 void update_forces(KnowledgeGraph* knowledgegraph) {
-    // Iterate through all entities
     for (int i = 0; i < knowledgegraph->num_entities; i++) {
-        int force_x = 0;
-        int force_y = 0;
+        double force_x = 0;
+        double force_y = 0;
         Entity* entity1 = knowledgegraph->entities[i];
 
-        // Calculate repulsive forces between entities
+        // Relation Attractive Force
+        for (int j = 0; j < entity1->num_relations; j++) {
+            Entity* relatedEntity = entity1->relations[j]->entity;
+            double dx = relatedEntity->x-entity1->x;
+            double dy = relatedEntity->y-entity1->y;
+            double distance = sqrt(dx * dx + dy * dy);
+            double spring_force = C1 * log(distance / C2);
+            force_x = spring_force*(dx/distance);
+            force_y = spring_force*(dy/distance);
+            move_entity(entity1, force_x, force_y);
+            move_entity(relatedEntity, -force_x, -force_y);
+        }
+
+        //Entity Repulsive Force
         for (int j = 0; j < knowledgegraph->num_entities; j++) {
             if (i != j) {
                 Entity* entity2 = knowledgegraph->entities[j];
-                int dx = entity1->x - entity2->x;
-                int dy = entity1->y - entity2->y;
-                double distance_squared = dx * dx + dy * dy;
-
-                // Repulsive force
-                double repulsive_force = C3 / (distance_squared);
-                force_x += repulsive_force;
-                force_y += repulsive_force;
+                double dx = entity2->x-entity1->x;
+                double dy = entity2->y-entity1->y;
+                double distance = sqrt(dx * dx + dy * dy);
+                double repulsive_force = C3 / (distance*distance);
+                force_x = repulsive_force*(dx/distance);
+                force_y = repulsive_force*(dy/distance);
+                move_entity(entity1, force_x, force_y);
+                move_entity(entity2, -force_x, -force_y);
             }
         }
-
-        // Calculate spring forces between related entities
-        for (int j = 0; j < entity1->num_relations; j++) {
-            Entity* relatedEntity = entity1->relations[j]->entity;
-            int dx = entity1->x - relatedEntity->x;
-            int dy = entity1->y - relatedEntity->y;
-            double distance_squared = dx * dx + dy * dy;
-            double distance = sqrt(distance_squared);
-
-            // Spring force
-            double spring_force = C1 * log(distance / C2);
-            force_x -= spring_force;
-            force_y -= spring_force;
-        }
-
-        // Update entity position based on forces
-        entity1->x += (int)(C4 * force_x);
-        entity1->y += (int)(C4 * force_y);
-        printf("Force: %d, %d", force_x, force_y);
     }
 }
 
@@ -247,8 +258,25 @@ void render_entities(SDL_Renderer* renderer, KnowledgeGraph* knowledgegraph, TTF
     SDL_RenderPresent(renderer);
 }
 
+void delay_to_next_frame(clock_t* last_frame_time) {
+    clock_t current_time = clock();
+    double elapsed_time = ((double)current_time - *last_frame_time) / CLOCKS_PER_SEC;
+    double frame_time = 1.0 / FPS;
+    double remaining_time = frame_time - elapsed_time;
+
+    if (remaining_time > 0) {
+        int delay_ms = (int)(remaining_time * 1000);
+        if (delay_ms > 0)
+            SDL_Delay(delay_ms);
+    }
+
+    *last_frame_time = clock();
+}
+
+
 int main(int argc, char* argv[]) {
     srand(time(NULL));
+    clock_t last_frame_time = clock(); // Initialize last frame time
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("SDL initialization failed! Error: %s\n", SDL_GetError());
@@ -288,28 +316,23 @@ int main(int argc, char* argv[]) {
         { "banana", "", "is a", "", "fruit", "" },
         { "orange", "", "is a", "", "fruit", "" },
         { "fruit", "", "is a type of", "", "food", "" },
-        { "carrot", "", "is a", "", "vegetable", "" },
-        { "broccoli", "", "is a", "", "vegetable", "" },
-        { "vegetable", "", "is a type of", "", "food", "" },
-        { "dog", "", "is a", "", "mammal", "" },
-        { "cat", "", "is a", "", "mammal", "" },
-        { "mammal", "", "is a type of", "", "animal", "" },
-        { "fish", "", "is a", "", "animal", "" },
-        { "bird", "", "is a", "", "animal", "" },
-        { "animal", "", "is a type of", "", "living thing", "" },
-        { "flower", "", "is a", "", "plant", "" },
-        { "tree", "", "is a", "", "plant", "" },
-        { "plant", "", "is a type of", "", "living thing", "" },
-        { "living thing", "", "is a part of", "", "ecosystem", "" },
-        { "ecosystem", "", "is a type of", "", "environment", "" },
-        { "environment", "", "is essential for", "", "life", "" },
-        { "life", "", "is characterized by", "", "growth", "" }
+        { "food", "", "can be", "", "eaten", "" },
+        { "eaten", "", "is a", "", "verb", "" },
+        { "fruit", "", "contains", "", "vitamins", "" },
+        { "vitamins", "", "are essential for", "", "health", "" },
+        { "health", "", "is", "", "important", "" },
+        { "important", "", "is a", "", "concept", "" },
+        { "concept", "", "is related to", "", "idea", "" },
+        { "idea", "", "can lead to", "", "innovation", "" },
+        { "innovation", "", "is important for", "", "progress", "" },
+        { "progress", "", "leads to", "", "development", "" },
+        { "development", "", "is necessary for", "", "growth", "" }
     };
 
     for (int i = 0; i < sizeof(knowledge) / sizeof(knowledge[0]); i++) {
         add_knowledge(knowledgegraph, knowledge[i][0], knowledge[i][1], knowledge[i][2], knowledge[i][3], knowledge[i][4], knowledge[i][5]);
     }
-    print_graph(knowledgegraph);
+    // print_graph(knowledgegraph);
 
     // Event loop
     int quit = 0;
@@ -320,11 +343,8 @@ int main(int argc, char* argv[]) {
                 quit = 1;
             }
         }
-        time_t start_time, end_time;
-        time(&start_time);
-        while (difftime(start_time, end_time)<10){ //100 Frames per Second.
-            time(&end_time);
-        }
+
+        delay_to_next_frame(&last_frame_time);
         render_entities(renderer, knowledgegraph, font);
     }
 
