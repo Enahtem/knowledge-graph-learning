@@ -4,7 +4,8 @@
 
 ## Description
 
-???
+Can currently graph in sdl a graph passed to it, with force based algorithm.
+
 
 ## Getting Started
 
@@ -46,8 +47,6 @@ command to run if program contains helper info
   -
 
 ## Roadmap
-
-Weekly Update Meetings (~6:00 on Mondays at PT271)
 
 - [ ] Force Based Graph Drawing
 - [ ] IBM Grapher Implementation
